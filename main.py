@@ -19,23 +19,23 @@ def test_speed(num_tests=3):
         download_speeds = []
         upload_speeds = []
         
-        start_time = time.time()  # Marca el tiempo de inicio
+        start_time = time.time()  # Mark start time
         
         for _ in range(num_tests):
-            download_speed = st.download() / 1_000_000  # Convertir a Mbps
-            upload_speed = st.upload() / 1_000_000  # Convertir a Mbps
+            download_speed = st.download() / 1_000_000  # Convert to Mbps
+            upload_speed = st.upload() / 1_000_000  # Convert to Mbps
             latency = st.results.ping
             
             download_speeds.append(download_speed)
             upload_speeds.append(upload_speed)
             
-            time.sleep(1)  # Esperar un segundo entre pruebas para evitar interferencias
+            time.sleep(1)  # Wait a second between tests to avoid interference
 
         avg_download_speed = sum(download_speeds) / len(download_speeds)
         avg_upload_speed = sum(upload_speeds) / len(upload_speeds)
         public_ip = get_public_ip()
         
-        elapsed_time = time.time() - start_time  # Calcula el tiempo transcurrido
+        elapsed_time = time.time() - start_time  # Calculate elapsed time
         
         return avg_download_speed, avg_upload_speed, latency, public_ip, elapsed_time
     except Exception as e:
@@ -46,17 +46,17 @@ def update_speed():
     global running
     global start_time
     running = True
-    start_time = time.time()  # Marca el tiempo de inicio
+    start_time = time.time()  # Mark start time
     lbl_status.configure(text="Testing...")
     btn_test.configure(state="disabled")
-    update_timer()  # Inicia la actualización del cronómetro
+    update_timer()  # Start the stopwatch
 
 def update_timer():
     if running:
         elapsed_time = time.time() - start_time
         minutes, seconds = divmod(int(elapsed_time), 60)
         lbl_timer.configure(text=f"Time Elapsed: {minutes:02}:{seconds:02}")
-        root.after(1000, update_timer)  # Actualiza el cronómetro cada segundo
+        root.after(1000, update_timer)  # Update the stopwatch every second
 
 def stop_test():
     global running
@@ -71,11 +71,11 @@ def stop_test():
         lbl_latency.configure(text=f"Latency: {latency} ms")
         lbl_ip.configure(text=f"Public IP: {public_ip}")
 
-# Configuración de la ventana principal
+# Main window setup
 root = ctk.CTk()
 root.title("Internet Speed Test")
 
-# Agregar widgets
+# Add widgets
 lbl_download = ctk.CTkLabel(root, text="Download Speed: N/A")
 lbl_download.pack(pady=10)
 lbl_upload = ctk.CTkLabel(root, text="Upload Speed: N/A")
@@ -94,9 +94,9 @@ lbl_status.pack(pady=10)
 btn_test = ctk.CTkButton(root, text="Start Test", command=update_speed)
 btn_test.pack(pady=20)
 
-# Inicializa la variable de estado
+# Initialize state variables
 running = False
 start_time = 0
 
-# Iniciar la aplicación
+# Start the application
 root.mainloop()
